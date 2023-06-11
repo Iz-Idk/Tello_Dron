@@ -10,6 +10,14 @@ color = None
 
 
 def detectColors(l_camera):
+    """
+        Esta función hace uso de la cámara del dron Tello y se obtiene el valor del pixel central
+        en formato HSV para determinar el color que ha sido detectado con la moda de los valores obtenidos
+        en 30 frames.
+        @l_camera    |   Instancia de robot.camera
+        
+        returns @color  |   Un string con el color detectado por la cámara. Puede ser GRAY, PINK o RED.     
+    """
     #   Inicia a capturar imagen
     l_camera.start_video_stream(display=False)
     moda = []

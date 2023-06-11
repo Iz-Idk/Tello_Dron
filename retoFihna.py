@@ -7,8 +7,6 @@ from statistics import mode
 
 color = None
 
-
-
 def detectColors(l_camera):
     """
         Esta función hace uso de la cámara del dron Tello y se obtiene el valor del pixel central
@@ -39,8 +37,7 @@ def detectColors(l_camera):
         hue_val = pixel_center[0]
 
         color = "TBA"
-        #   Sí el valor es menor a 5, entonces es Rojo, de lo contrario es otro de los colores
-        
+        #   Sí el valor es menor a cierto rango en el Hue y en Saturación, se determina el color.
         if(hue_val > 80 and hue_val < 150 and (pixel_center[1] > 4) and (pixel_center[1] < 34)):
             color = "GRAY"
         elif(hue_val > 150 and hue_val < 165 and (pixel_center[1] > 40) or (pixel_center[1] < 47)):
@@ -141,7 +138,6 @@ def redSequence(tl_flight):
     tl_flight.down(distance=50).wait_for_completed()
     print("Finished Magenta trayectory")
 
-
 def pinkSequence(tl_flight):
     """
         This trayectory the Tello Drone back to its starting position
@@ -162,8 +158,6 @@ def pinkSequence(tl_flight):
     print("Finished Pink trayectory")
 
 
-  
-
 def chooseSequence(color, tl_flight):
     """
         Defines the sequence that must be executed by the robot
@@ -177,14 +171,12 @@ def chooseSequence(color, tl_flight):
     elif(color is "RED"):
         blueSequence(tl_flight)
     elif(color is "PINK"):
-        pinkSequence(tl_flight)
-    
+        pinkSequence(tl_flight)  
     else:
-        # mata el dron
+        # Kills the drone
         pass
 
-
-
+    
 if __name__ == '__main__':
     #   Initialization of robot Drone
     l_drone = robot.Drone()
@@ -208,6 +200,7 @@ if __name__ == '__main__':
     color = detectColors(l_camera)
     time.sleep(2)
     try:
+        #   If the returned color isn't Gray, Pink, or magenta, it kills the program.
         if(color != "TBA"):
             print(color)
             chooseSequence(color, tl_flight)
@@ -215,12 +208,12 @@ if __name__ == '__main__':
             print(color)
             chooseSequence(color, tl_flight)
     except:
+        #   Security breach and 
         print("Sorry, killing drone")  
-        print(color)
+        print("Color detected:", color)
         print("Landing drone")
          # Set the QUAV to land
         tl_flight.land().wait_for_completed()
-
         # Close resources
         l_drone.close()
 
